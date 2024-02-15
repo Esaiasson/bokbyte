@@ -79,13 +79,13 @@ function ApiFetch() {
                             <Card.Title>{book.volumeInfo.title}</Card.Title>
                             <Card.Text>{book.volumeInfo.description.substr(0,25)}...<Button id="readMore">Läs mer</Button></Card.Text>
                         </Card.Body>
-                        {BookNeeds.includes(book.volumeInfo.industryIdentifiers[0].identifier) == false &&(
+                        {BookNeeds.includes(book.volumeInfo.industryIdentifiers[0].identifier) === false &&(
                             <Button variant="success" style={{margin: "10px"}} onClick={() => addBookNeeds(book.volumeInfo.industryIdentifiers[0].identifier)}>Vill ha boken</Button>
                         )} 
                         {BookNeeds.includes(book.volumeInfo.industryIdentifiers[0].identifier) &&(
                             <Button variant="danger" style={{margin: "10px"}} onClick={() => removeBookNeeds(book.volumeInfo.industryIdentifiers[0].identifier)}>Vill inte ha boken</Button>
                         )}
-                        {BookHas.includes(book.volumeInfo.industryIdentifiers[0].identifier) == false &&(
+                        {BookHas.includes(book.volumeInfo.industryIdentifiers[0].identifier) === false &&(
                             <Button variant="primary" style={{margin: "10px"}} onClick={() => addBookHas(book.volumeInfo.industryIdentifiers[0].identifier)}>Har boken</Button>
                         )} 
                         {BookHas.includes(book.volumeInfo.industryIdentifiers[0].identifier) &&(
