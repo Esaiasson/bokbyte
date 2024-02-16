@@ -37,23 +37,25 @@ function ApiFetch() {
         .catch(error => console.error('Error:', error));
     };
 
-    const addBookNeeds = (isbn) => {
-        setBookNeeds(  [...BookNeeds, isbn])
+    const addBookNeeds = (isbn, title) => {
+        const newBook = {'isbn': isbn, 'title': title}
+        setBookNeeds(  [...BookNeeds, newBook])
     }
 
-    const addBookHas = (isbn) => {
-        setBookHas(  [...BookHas, isbn])
+    const addBookHas = (isbn, title) => {
+        const newBook = {'isbn': isbn, 'title': title}
+        setBookHas(  [...BookHas, newBook])
     }
 
     const removeBookNeeds = (isbn) => {
         setBookNeeds(oldValues => {
-            return oldValues.filter(book => book !== isbn)
+            return oldValues.filter(book => book.isbn !== isbn)
         })
     }
 
     const removeBookHas = (isbn) => {
         setBookHas(oldValues => {
-            return oldValues.filter(book => book !== isbn)
+            return oldValues.filter(book => book.isbn !== isbn)
         })
     }
 
@@ -68,8 +70,18 @@ function ApiFetch() {
 
 
   return (
-    <div className="App">
+    <div>
         <button onClick={callApi}>kalla</button>
+        <div>
+            <h2>Böcker du vill ha</h2>
+            {BookNeeds.map((book, index) => (
+                <p key={index}>{book.title}</p>
+            ))}
+            <h2>Böcker du har</h2>
+            {BookHas.map((book, index) => (
+                <p key={index}>{book.title}</p>
+            ))}
+        </div>
         <div id="booksDiv">
             {bookData.map((book, index) => (
                 <>
@@ -79,16 +91,16 @@ function ApiFetch() {
                             <Card.Title>{book.volumeInfo.title}</Card.Title>
                             <Card.Text>{book.volumeInfo.description.substr(0,25)}...<Button id="readMore">Läs mer</Button></Card.Text>
                         </Card.Body>
-                        {BookNeeds.includes(book.volumeInfo.industryIdentifiers[0].identifier) == false &&(
-                            <Button variant="success" style={{margin: "10px"}} onClick={() => addBookNeeds(book.volumeInfo.industryIdentifiers[0].identifier)}>Vill ha boken</Button>
+                        {!BookNeeds.some(bookNeed => bookNeed.isbn === book.volumeInfo.industryIdentifiers[0].identifier) &&(
+                            <Button variant="success" style={{margin: "10px"}} onClick={() => addBookNeeds(book.volumeInfo.industryIdentifiers[0].identifier, book.volumeInfo.title)}>Vill ha boken</Button>
                         )} 
-                        {BookNeeds.includes(book.volumeInfo.industryIdentifiers[0].identifier) &&(
+                        {BookNeeds.some(bookNeed => bookNeed.isbn === book.volumeInfo.industryIdentifiers[0].identifier)  &&(
                             <Button variant="danger" style={{margin: "10px"}} onClick={() => removeBookNeeds(book.volumeInfo.industryIdentifiers[0].identifier)}>Vill inte ha boken</Button>
                         )}
-                        {BookHas.includes(book.volumeInfo.industryIdentifiers[0].identifier) == false &&(
-                            <Button variant="primary" style={{margin: "10px"}} onClick={() => addBookHas(book.volumeInfo.industryIdentifiers[0].identifier)}>Har boken</Button>
+                        {!BookHas.some(bookHas => bookHas.isbn === book.volumeInfo.industryIdentifiers[0].identifier) &&(
+                            <Button variant="primary" style={{margin: "10px"}} onClick={() => addBookHas(book.volumeInfo.industryIdentifiers[0].identifier, book.volumeInfo.title)}>Har boken</Button>
                         )} 
-                        {BookHas.includes(book.volumeInfo.industryIdentifiers[0].identifier) &&(
+                        {BookHas.some(bookHas => bookHas.isbn === book.volumeInfo.industryIdentifiers[0].identifier)  &&(
                             <Button variant="danger" style={{margin: "10px"}} onClick={() => removeBookHas(book.volumeInfo.industryIdentifiers[0].identifier)}>Har inte boken</Button>
                         )}
                     </Card>
