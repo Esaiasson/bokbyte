@@ -5,15 +5,22 @@ import OverlayTrigger from 'react-bootstrap/OverlayTrigger';
 import Popover from 'react-bootstrap/Popover';
 import './ApiFetch.css'
 
+
+
 function ApiFetch() {
+    const [data, setData] = React.useState(null);
+
+    React.useEffect(() => {
+        fetch("/api")
+          .then((res) => res.json())
+          .then((data) => console.log(data.message));
+      }, []);
+
     const API_KEY = process.env.REACT_APP_API_KEY;
 
     const [bookData, setBookData] = useState([]);
     const [BookNeeds, setBookNeeds] = useState([])
     const [BookHas, setBookHas] = useState([])
-
-
-
 
     const callApi = () => {
         const isbnNumbers = [9789100185589, 9789100802028];
