@@ -3,6 +3,7 @@ import Button from 'react-bootstrap/Button';
 import Card from 'react-bootstrap/Card';
 import OverlayTrigger from 'react-bootstrap/OverlayTrigger';
 import Popover from 'react-bootstrap/Popover';
+import Modal from 'react-bootstrap/Modal';
 import './ApiFetch.css'
 
 
@@ -23,17 +24,21 @@ function ApiFetch() {
     const [BookHas, setBookHas] = useState([])
     const [email, setEmail] = useState([])
     const [location, setLocation] = useState([])
+    const [show, setShow] = useState(false);
 
+    const handleClose = () => setShow(false);
+    const handleShow = () => setShow(true);
+
+
+    const showForm = () => {
+        handleShow();
+    }
 
     const postUserResponse = (e) => {
         e.preventDefault();
-        //const booksNeeds = { booksNeeds };
-        //const booksHas = { booksHas };
-        const email = 'test';
-        const location = 'GBG';
         const body = {
-            //'needs': booksNeeds,
-            //'has': booksHas,
+            'needs': BookNeeds,
+            'has': BookHas,
             'email': email,
             'location': location
         }
@@ -90,10 +95,19 @@ function ApiFetch() {
         })
     }
 
+    const handleChangeEmail = (event) => {
+        setEmail(event.target.value);
+    }
+
+    const handleChangeLocation = (event) => {
+        setLocation(event.target.value);
+    }
+
+
   return (
     <div>
         <button onClick={callApi}>kalla</button>
-        <button onClick={postUserResponse}>submit</button>
+        <Button variant="success" size="lg" id="submit" onClick={showForm}>Skicka svar</Button>
         <div>
             <h2>Böcker du vill ha</h2>
             {BookNeeds.map((book, index) => (
@@ -130,6 +144,28 @@ function ApiFetch() {
                 </>
             ))}
         </div>
+        <div
+            className="modal show"
+            style={{ display: 'block', position: 'initial' }}
+            >
+                <Modal show={show}>
+                <Modal.Dialog>
+                    <Modal.Header>
+                    <Modal.Title>För att kunna nå ut till dig med vilka bytesmöjligheter skulle vi uppskatta om du ville uppge din mailadress och postnummer. OBS! Det går bra att skicka in önskemålen även utan att fylla i mailadress och postnummer</Modal.Title>
+                    </Modal.Header>
+                    <Modal.Body id="inputFields">
+                        <label for="email">Email adress</label>
+                        <input id="email" placeholder='Skriv din mailadress (frivilligt)' onChange={handleChangeEmail}></input>
+                        <label for="postnr">Postnummer</label>
+                        <input id="postnr" placeholder='Postnummer (frivilligt)' onChange={handleChangeLocation}></input>
+                    </Modal.Body>
+
+                    <Modal.Footer>
+                    <Button variant="primary" onClick={postUserResponse}>Skicka svar</Button>
+                    </Modal.Footer>
+                </Modal.Dialog>
+                </Modal>
+            </div>
     </div>
   );
 }

@@ -16,7 +16,7 @@ function InformationModal() {
     >
         <Modal show={show}>
         <Modal.Dialog>
-            <Modal.Header closeButton>
+            <Modal.Header>
             <Modal.Title>Exemensarbete om byteshandel</Modal.Title>
             </Modal.Header>
 

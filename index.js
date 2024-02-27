@@ -3,7 +3,7 @@ const PORT = process.env.PORT || 3000;
 const path = require("path");
 const pool = require("./db");
 const app = express();
-
+const { v4: uuidv4 } = require('uuid');
 
 app.use(express.static(path.join(__dirname, "client/build")));
 app.use(express.json())
@@ -27,14 +27,61 @@ app.get("/books", async (req, res) => {
 
 app.post ("/userResponse", async (req, res) => {
   try{
-    const description = req.body;
-    const email = description.email
-    const newResponse = await pool.query("INSERT INTO respondent (email, locations) VALUES($1, $2)",
-    [description.email, description.location])
+    const body = req.body;
+    const id = uuidv4()
+    addRespondent(body, id)
+    addBookNeeds(body, id)
+    addBookHas(body, id)
   } catch (err){
     console.error(err.message)
   }
 })
+
+const addRespondent = async (body, id) => {
+  try{
+    const newResponse = await pool.query("INSERT INTO respondent (id, email, locations) VALUES($1, $2, $3)",
+    [id, body.email, body.location])
+  } catch (err){
+    console.error(err.message)
+  }
+}
+
+
+
+const addBookNeeds = async (body, id) => {
+  body.needs.forEach(element => {
+    insertIntoBookNeeds(id, element);
+  });
+
+}
+
+
+const insertIntoBookNeeds = async(id, element) => {
+  try{
+    const newResponse = await pool.query("INSERT INTO books_i_want (user_id, book_id) VALUES($1, $2)",
+    [id, element.isbn])
+  } catch (err){
+    console.error(err.message)
+  }
+}
+
+
+const addBookHas = async (body, id) => {
+  body.has.forEach(element => {
+    insertIntoBookHas(id, element);
+  });
+
+}
+
+
+const insertIntoBookHas = async(id, element) => {
+  try{
+    const newResponse = await pool.query("INSERT INTO books_i_have (user_id, book_id) VALUES($1, $2)",
+    [id, element.isbn])
+  } catch (err){
+    console.error(err.message)
+  }
+}
 
 app.listen(PORT, () => {
   console.log('Server listening on' + PORT);
