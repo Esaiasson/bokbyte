@@ -21,6 +21,30 @@ function ApiFetch() {
     const [bookData, setBookData] = useState([]);
     const [BookNeeds, setBookNeeds] = useState([])
     const [BookHas, setBookHas] = useState([])
+    const [email, setEmail] = useState([])
+    const [location, setLocation] = useState([])
+
+
+    const postUserResponse = (e) => {
+        e.preventDefault();
+        //const booksNeeds = { booksNeeds };
+        //const booksHas = { booksHas };
+        const email = 'test';
+        const location = 'GBG';
+        const body = {
+            //'needs': booksNeeds,
+            //'has': booksHas,
+            'email': email,
+            'location': location
+        }
+        console.log(body)
+        fetch("/userResponse", {
+            method: 'POST',
+            headers: {"Content-Type": "application/json"},
+            body: JSON.stringify(body)
+        })
+        
+    }
 
     const callApi = () => {
         const isbnNumbers = [9789100185589, 9789100802028];
@@ -69,6 +93,7 @@ function ApiFetch() {
   return (
     <div>
         <button onClick={callApi}>kalla</button>
+        <button onClick={postUserResponse}>submit</button>
         <div>
             <h2>Böcker du vill ha</h2>
             {BookNeeds.map((book, index) => (

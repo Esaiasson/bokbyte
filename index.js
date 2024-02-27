@@ -6,6 +6,7 @@ const app = express();
 
 
 app.use(express.static(path.join(__dirname, "client/build")));
+app.use(express.json())
 
 if (process.env.NODE_ENV === "production") {
   //server static content
@@ -13,13 +14,9 @@ if (process.env.NODE_ENV === "production") {
   app.use(express.static(path.join(__dirname, "client/build")));
 }
 
-app.get("/api", (req, res) => {
-    res.json({ message: "Hello from server!" });
-  });
 
 app.get("/books", async (req, res) => {
   try {
-    console.log("hit")
     const allTodos = await pool.query("SELECT * FROM books");
 
     res.json(allTodos.rows);
@@ -27,6 +24,17 @@ app.get("/books", async (req, res) => {
     console.error(err.message);
   }
 });
+
+app.post ("/userResponse", async (req, res) => {
+  try{
+    const description = req.body;
+    const email = description.email
+    const newResponse = await pool.query("INSERT INTO respondent (email, locations) VALUES($1, $2)",
+    [description.email, description.location])
+  } catch (err){
+    console.error(err.message)
+  }
+})
 
 app.listen(PORT, () => {
   console.log('Server listening on' + PORT);
