@@ -4,6 +4,7 @@ import Card from 'react-bootstrap/Card';
 import OverlayTrigger from 'react-bootstrap/OverlayTrigger';
 import Popover from 'react-bootstrap/Popover';
 import Modal from 'react-bootstrap/Modal';
+import { v4 as uuid } from 'uuid'
 import './ApiFetch.css'
 
 
@@ -34,13 +35,20 @@ function ApiFetch() {
         handleShow();
     }
 
+    useEffect(() => {
+        if (localStorage.getItem("session_id") === null){
+            localStorage.setItem("session_id", uuid());
+        }
+    }, []);
+
     const postUserResponse = (e) => {
         e.preventDefault();
         const body = {
             'needs': BookNeeds,
             'has': BookHas,
             'email': email,
-            'location': location
+            'location': location,
+            'sessionId': localStorage.getItem("session_id")
         }
         console.log(body)
         fetch("/userResponse", {

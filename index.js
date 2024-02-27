@@ -39,8 +39,8 @@ app.post ("/userResponse", async (req, res) => {
 
 const addRespondent = async (body, id) => {
   try{
-    const newResponse = await pool.query("INSERT INTO respondent (id, email, locations) VALUES($1, $2, $3)",
-    [id, body.email, body.location])
+    const newResponse = await pool.query("INSERT INTO respondent (id, email, locations, session_id) VALUES($1, $2, $3, $4)",
+    [id, body.email, body.location, body.sessionId])
   } catch (err){
     console.error(err.message)
   }
