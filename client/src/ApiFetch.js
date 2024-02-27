@@ -11,9 +11,9 @@ function ApiFetch() {
     const [data, setData] = React.useState(null);
 
     React.useEffect(() => {
-        fetch("/api")
+        fetch("/books")
           .then((res) => res.json())
-          .then((data) => console.log(data.message));
+          .then((data) => console.log(data));
       }, []);
 
     const API_KEY = process.env.REACT_APP_API_KEY;
@@ -65,16 +65,6 @@ function ApiFetch() {
             return oldValues.filter(book => book.isbn !== isbn)
         })
     }
-
-    useEffect(() => {
-        console.log(BookNeeds)
-    }, [BookNeeds])
-
-    useEffect(() => {
-        console.log(BookHas)
-    }, [BookHas])
-
-
 
   return (
     <div>
