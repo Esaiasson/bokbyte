@@ -12,6 +12,12 @@
 
 #booksDiv{
     display: flex;
+    flex-direction: column;
+}
+
+.categoryDiv{
+    display: flex;
+    flex-direction: row;
 }
 
 #submit{

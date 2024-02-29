@@ -14,16 +14,14 @@ if (process.env.NODE_ENV === "production") {
   app.use(express.static(path.join(__dirname, "client/build")));
 }
 
-
 app.get("/books", async (req, res) => {
   try {
-    const allTodos = await pool.query("SELECT * FROM books");
-
-    res.json(allTodos.rows);
-  } catch (err) {
-    console.error(err.message);
+    const response = await pool.query("SELECT * FROM books")
+    res.json(response.rows)
+  } catch (err){
+    console.error(err.message)
   }
-});
+})
 
 app.post ("/userResponse", async (req, res) => {
   try{
@@ -82,6 +80,7 @@ const insertIntoBookHas = async(id, element) => {
     console.error(err.message)
   }
 }
+
 
 app.listen(PORT, () => {
   console.log('Server listening on' + PORT);

@@ -6,17 +6,13 @@ import Popover from 'react-bootstrap/Popover';
 import Modal from 'react-bootstrap/Modal';
 import { v4 as uuid } from 'uuid'
 import './ApiFetch.css'
+import BooksCard from './BooksCard';
 
 
 
 function ApiFetch() {
-    const [data, setData] = React.useState(null);
 
-    React.useEffect(() => {
-        fetch("/books")
-          .then((res) => res.json())
-          .then((data) => console.log(data));
-      }, []);
+    const [data, setData] = React.useState(null);
 
     const API_KEY = process.env.REACT_APP_API_KEY;
 
@@ -25,6 +21,9 @@ function ApiFetch() {
     const [BookHas, setBookHas] = useState([])
     const [email, setEmail] = useState([])
     const [location, setLocation] = useState([])
+    const [booksInDb, setBooksInDb] = useState([])
+    const [booksCat1, setBooksCat1] = useState([])
+    const [booksCat2, setBooksCat2] = useState([])
     const [show, setShow] = useState(false);
 
     const handleClose = () => setShow(false);
@@ -41,6 +40,17 @@ function ApiFetch() {
         }
     }, []);
 
+    useEffect(() => {
+        getBooks();
+    }, []);
+
+    useEffect(() => {
+        if(booksInDb.length >= 1){
+            callApi(1)
+            callApi(2)
+        }
+    }, [booksInDb]);
+
     const postUserResponse = (e) => {
         e.preventDefault();
         const body = {
@@ -50,7 +60,6 @@ function ApiFetch() {
             'location': location,
             'sessionId': localStorage.getItem("session_id")
         }
-        console.log(body)
         fetch("/userResponse", {
             method: 'POST',
             headers: {"Content-Type": "application/json"},
@@ -59,11 +68,17 @@ function ApiFetch() {
         
     }
 
-    const callApi = () => {
-        const isbnNumbers = [9789100185589, 9789100802028];
+    const callApi = (category) => {
+        
+        const books = []
 
-        const apiRequests = isbnNumbers.map(isbn => {
-        const apiUrl = `https://www.googleapis.com/books/v1/volumes?q=isbn:${isbn}&key=${API_KEY}`;
+        booksInDb.forEach(book => {
+            if(book.category == category)
+            books.push(parseInt(book.isbn))
+        })
+
+        const apiRequests = books.map(book => {
+        const apiUrl = `https://www.googleapis.com/books/v1/volumes?q=isbn:${book}&key=${API_KEY}`;
         return fetch(apiUrl)
             .then(response => {
             if (!response.ok) {
@@ -76,10 +91,30 @@ function ApiFetch() {
 
         Promise.all(apiRequests)
         .then(results => {
-            setBookData(results);
+            if (category === 1){
+                setBooksCat1(results);
+            }
+            if (category === 2){
+                setBooksCat2(results);
+            }
         })
         .catch(error => console.error('Error:', error));
     };
+
+    const getBooks = async () => {
+        const booksArray = []
+        const response = await fetch("/books")
+        const books = await response.json()
+        books.forEach(element => {
+            booksArray.push(
+                {
+                    'isbn': element.isbn,
+                    'category': element.category
+                }
+            )
+        });
+        await setBooksInDb(booksArray)
+    }
 
     const addBookNeeds = (isbn, title) => {
         const newBook = {'isbn': isbn, 'title': title}
@@ -114,7 +149,7 @@ function ApiFetch() {
 
   return (
     <div>
-        <button onClick={callApi}>kalla</button>
+        <button>kalla</button>
         <Button variant="success" size="lg" id="submit" onClick={showForm}>Skicka svar</Button>
         <div>
             <h2>Böcker du vill ha</h2>
@@ -127,30 +162,34 @@ function ApiFetch() {
             ))}
         </div>
         <div id="booksDiv">
-            {bookData.map((book, index) => (
-                <>
-                    <Card key={book.volumeInfo.industryIdentifiers[0].identifier} id={book.volumeInfo.industryIdentifiers[0].identifier} style={{ width: '10rem', margin: '20px' }}>
-                    <Card.Img variant="top" src={book.volumeInfo.imageLinks.smallThumbnail} fluid></Card.Img>
-                        <Card.Body>
-                            <Card.Title>{book.volumeInfo.title}</Card.Title>
-                            <Card.Text>{book.volumeInfo.description.substr(0,25)}...<Button id="readMore">Läs mer</Button></Card.Text>
-                        </Card.Body>
-                        {!BookNeeds.some(bookNeed => bookNeed.isbn === book.volumeInfo.industryIdentifiers[0].identifier) &&(
-                            <Button variant="success" style={{margin: "10px"}} onClick={() => addBookNeeds(book.volumeInfo.industryIdentifiers[0].identifier, book.volumeInfo.title)}>Vill ha boken</Button>
-                        )} 
-                        {BookNeeds.some(bookNeed => bookNeed.isbn === book.volumeInfo.industryIdentifiers[0].identifier)  &&(
-                            <Button variant="danger" style={{margin: "10px"}} onClick={() => removeBookNeeds(book.volumeInfo.industryIdentifiers[0].identifier)}>Vill inte ha boken</Button>
-                        )}
-                        {!BookHas.some(bookHas => bookHas.isbn === book.volumeInfo.industryIdentifiers[0].identifier) &&(
-                            <Button variant="primary" style={{margin: "10px"}} onClick={() => addBookHas(book.volumeInfo.industryIdentifiers[0].identifier, book.volumeInfo.title)}>Har boken</Button>
-                        )} 
-                        {BookHas.some(bookHas => bookHas.isbn === book.volumeInfo.industryIdentifiers[0].identifier)  &&(
-                            <Button variant="danger" style={{margin: "10px"}} onClick={() => removeBookHas(book.volumeInfo.industryIdentifiers[0].identifier)}>Har inte boken</Button>
-                        )}
-                    </Card>
-
-                </>
-            ))}
+            <h2>Kategori 1</h2>
+            <div class="categoryDiv">
+                {booksCat1.map((book, index) => (
+                    <BooksCard
+                        book = {book}
+                        BookNeeds = {BookNeeds}
+                        BookHas = {BookHas}
+                        addBookNeeds = {addBookNeeds}
+                        addBookHas = {addBookHas}
+                        removeBookNeeds = {removeBookNeeds}
+                        removeBookHas = {removeBookHas}
+                    ></BooksCard>
+                ))}
+            </div>
+            <h2>Kategori 2</h2>
+            <div class="categoryDiv">
+                {booksCat2.map((book, index) => (
+                    <BooksCard
+                        book = {book}
+                        BookNeeds = {BookNeeds}
+                        BookHas = {BookHas}
+                        addBookNeeds = {addBookNeeds}
+                        addBookHas = {addBookHas}
+                        removeBookNeeds = {removeBookNeeds}
+                        removeBookHas = {removeBookHas}
+                    ></BooksCard>
+                ))}
+            </div>
         </div>
         <div
             className="modal show"
