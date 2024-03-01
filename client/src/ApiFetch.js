@@ -149,7 +149,6 @@ function ApiFetch() {
 
   return (
     <div>
-        <button>kalla</button>
         <Button variant="success" size="lg" id="submit" onClick={showForm}>Skicka svar</Button>
         <div>
             <h2>Böcker du vill ha</h2>
@@ -163,7 +162,7 @@ function ApiFetch() {
         </div>
         <div id="booksDiv">
             <h2>Kategori 1</h2>
-            <div class="categoryDiv">
+            <div className="categoryDiv">
                 {booksCat1.map((book, index) => (
                     <BooksCard
                         book = {book}
@@ -177,7 +176,7 @@ function ApiFetch() {
                 ))}
             </div>
             <h2>Kategori 2</h2>
-            <div class="categoryDiv">
+            <div className="categoryDiv">
                 {booksCat2.map((book, index) => (
                     <BooksCard
                         book = {book}

@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 import Button from 'react-bootstrap/Button';
 import Card from 'react-bootstrap/Card';
 
-
 function BooksCard(props) {
     
     const book = props.book
@@ -12,15 +11,25 @@ function BooksCard(props) {
     const addBookHas = props.addBookHas
     const removeBookNeeds = props.removeBookNeeds
     const removeBookHas = props.removeBookHas
+    const [showFullText, setShowFullText] = useState(false);
 
-    console.log(BookNeeds)
+    const toggleText = () => {
+        setShowFullText(!showFullText);
+    };
+
+
     return (
         <>
             <Card key={book.volumeInfo.industryIdentifiers[0].identifier} id={book.volumeInfo.industryIdentifiers[0].identifier} style={{ width: '10rem', margin: '20px' }}>
             <Card.Img variant="top" src={book.volumeInfo.imageLinks.smallThumbnail} fluid></Card.Img>
                 <Card.Body>
                     <Card.Title>{book.volumeInfo.title}</Card.Title>
-                    <Card.Text>{book.volumeInfo.description.substr(0,25)}...<Button id="readMore">Läs mer</Button></Card.Text>
+                    <Card.Text>
+                        {showFullText ? book.volumeInfo.description : `${book.volumeInfo.description.substr(0, 25)}...`}
+                        <Button id="readMore" onClick={toggleText}>
+                            {showFullText ? 'Visa mindre' : 'Läs mer'}
+                        </Button>
+                    </Card.Text>
                 </Card.Body>
                 {!BookNeeds.some(bookNeed => bookNeed.isbn === book.volumeInfo.industryIdentifiers[0].identifier) &&(
                     <Button variant="success" style={{margin: "10px"}} onClick={() => addBookNeeds(book.volumeInfo.industryIdentifiers[0].identifier, book.volumeInfo.title)}>Vill ha boken</Button>
@@ -35,7 +44,6 @@ function BooksCard(props) {
                     <Button variant="danger" style={{margin: "10px"}} onClick={() => removeBookHas(book.volumeInfo.industryIdentifiers[0].identifier)}>Har inte boken</Button>
                 )}
             </Card>
-
         </>
     );
 }
