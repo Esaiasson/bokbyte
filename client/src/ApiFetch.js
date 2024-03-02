@@ -155,7 +155,6 @@ function ApiFetch() {
     }
 
     const postBooks = (bookList) => {
-        console.log("boklista" + bookList)
         fetch("/createBooks", {
             method: 'POST',
             headers: {"Content-Type": "application/json"},
@@ -166,7 +165,7 @@ function ApiFetch() {
 
 const populate = async () => {
 
-    const books = [9789164244444];
+    const books = [9789137153711, 9789189750098];
     const booksToDb = [];
     const category = 1
 
@@ -185,7 +184,6 @@ const populate = async () => {
 
             if (data && data.items) {
                 const book = data.items[0];
-                console.log(book);
 
                 if (
                     book.volumeInfo.hasOwnProperty('industryIdentifiers') &&
@@ -197,10 +195,8 @@ const populate = async () => {
                     let isbn = ''
 
                     if(Array.isArray(book.volumeInfo.industryIdentifiers)){
-                        console.log("array")
                         isbn = book.volumeInfo.industryIdentifiers[0].identifier
                     } else{
-                        console.log("ej array")
                         isbn = book.volumeInfo.industryIdentifiers
                     }
 
@@ -211,8 +207,6 @@ const populate = async () => {
                         description: book.volumeInfo.description,
                         category: category,
                     };
-
-                    console.log("push", resObj);
                     booksToDb.push(resObj);
                 }
             }
@@ -260,25 +254,11 @@ const populate = async () => {
                     );
                 })}
             </div>
-            <h2>Kategori 2</h2>
+            <h2>Kategori 1</h2>
             <div className="categoryDiv">
                 {booksCat2.map((book, index) => {
-
-                let ok = false
-
-                console.log(book.volumeInfo.hasOwnProperty('industryIdentifiers'))
-                console.log(book.volumeInfo.hasOwnProperty('imageLinks'))
-                console.log(book.volumeInfo.hasOwnProperty('title')) 
-                console.log(book.volumeInfo.hasOwnProperty('description'))
-
-                if(book.volumeInfo.hasOwnProperty('industryIdentifiers') && book.volumeInfo.hasOwnProperty('imageLinks') && book.volumeInfo.hasOwnProperty('title') && book.volumeInfo.hasOwnProperty('description')){
-                    ok = true
-                    console.log(book.volumeInfo.imageLinks.smallThumbnail)
-                }
-
-                return (
-                    <div key={index}>
-                        {ok === true ? (
+                    return (
+                        <div key={index}>
                             <BooksCard
                                 book={book}
                                 BookNeeds={BookNeeds}
@@ -288,11 +268,8 @@ const populate = async () => {
                                 removeBookNeeds={removeBookNeeds}
                                 removeBookHas={removeBookHas}
                             />
-                        ) : (
-                            <p>X</p>
-                        )}
-                    </div>
-                );
+                        </div>
+                    );
                 })}
             </div>
             </div>

@@ -38,7 +38,6 @@ app.post ("/userResponse", async (req, res) => {
 app.post ("/createBooks", async (req, res) => {
   try{
     const body = req.body;
-    console.log("body i post:" +  body)
     addBook(body)
   } catch (err){
     console.error(err.message)
@@ -66,7 +65,6 @@ const addBookNeeds = async (body, id) => {
 
 
 const addBook = async (body) => {
-  console.log(body)
   body.forEach(element => {
     insertIntoBooks(element);
   });
@@ -75,7 +73,6 @@ const addBook = async (body) => {
 
 const insertIntoBooks = async(element) => {
   try{
-    console.log("testar2")
     const newResponse = await pool.query("INSERT INTO books (Isbn, Imagelink, Title, Description, Category) VALUES($1, $2, $3, $4, $5)",
     [element.isbn, element.imageLinks, element.title, element.description, element.category])
   } catch (err){
