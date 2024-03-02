@@ -20,7 +20,7 @@ function BooksCard(props) {
 
     return (
         <>
-            <Card key={book.isbn} id={book.isbn} style={{ width: '10rem', margin: '20px' }}>
+            <Card key={book.isbn} id={book.isbn} style={{ width: '10rem', margin: '20px', minHeight: '545px'}}>
             <Card.Img variant="top" src={book.imagelink} fluid></Card.Img>
                 <Card.Body>
                     <Card.Title>{book.title}</Card.Title>
@@ -31,16 +31,16 @@ function BooksCard(props) {
                         </Button>
                     </Card.Text>
                 </Card.Body>
-                {!BookNeeds.some(bookNeed => bookNeed.isbn === book.volumeInfo.industryIdentifiers[0].identifier) &&(
+                {!BookNeeds.some(bookNeed => bookNeed.isbn === book.isbn) &&(
                     <Button variant="success" style={{margin: "10px"}} onClick={() => addBookNeeds(book.isbn, book.title)}>Vill ha boken</Button>
                 )} 
-                {BookNeeds.some(bookNeed => bookNeed.isbn === book.volumeInfo.industryIdentifiers[0].identifier)  &&(
+                {BookNeeds.some(bookNeed => bookNeed.isbn === book.isbn)  &&(
                     <Button variant="danger" style={{margin: "10px"}} onClick={() => removeBookNeeds(book.isbn)}>Vill inte ha boken</Button>
                 )}
-                {!BookHas.some(bookHas => bookHas.isbn === book.volumeInfo.industryIdentifiers[0].identifier) &&(
+                {!BookHas.some(bookHas => bookHas.isbn === book.isbn) &&(
                     <Button variant="primary" style={{margin: "10px"}} onClick={() => addBookHas(book.isbn, book.title)}>Har boken</Button>
                 )} 
-                {BookHas.some(bookHas => bookHas.isbn === book.volumeInfo.industryIdentifiers[0].identifier)  &&(
+                {BookHas.some(bookHas => bookHas.isbn === book.isbn)  &&(
                     <Button variant="danger" style={{margin: "10px"}} onClick={() => removeBookHas(book.isbn)}>Har inte boken</Button>
                 )}
             </Card>
