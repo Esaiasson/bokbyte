@@ -43,12 +43,6 @@ function ApiFetch() {
         getBooks();
     }, []);
 
-    useEffect(() => {
-        if(booksInDb.length >= 1){
-            //callApi(1)
-            //callApi(2)
-        }
-    }, [booksInDb]);
 
     const postUserResponse = (e) => {
         e.preventDefault();
@@ -101,18 +95,33 @@ function ApiFetch() {
     };
 
     const getBooks = async () => {
+
         const booksArray = []
+        const books1 = []
+        const books2 = []
         const response = await fetch("/books")
         const books = await response.json()
-        books.forEach(element => {
+        await books.forEach(element => {
             booksArray.push(
                 {
                     'isbn': element.isbn,
-                    'category': element.category
+                    'category': element.category,
+                    'title': element.title,
+                    'description': element.description,
+                    'imagelink': element.imagelink
                 }
             )
         });
-        await setBooksInDb(booksArray)
+        booksArray.forEach(element => {
+            if(element.category === 1){
+                books1.push(element)
+            }
+            if(element.category === 2){
+                books2.push(element)
+            }
+        })
+        setBooksCat1(books1)
+        setBooksCat2(books2)
     }
 
     const addBookNeeds = (isbn, title) => {
@@ -236,22 +245,8 @@ const populate = async () => {
             <h2>Kategori 1</h2>
             <div className="categoryDiv">
                 {booksCat1.map((book, index) => {
-
-                let ok = false
-
-                console.log(book.volumeInfo.hasOwnProperty('industryIdentifiers'))
-                console.log(book.volumeInfo.hasOwnProperty('imageLinks'))
-                console.log(book.volumeInfo.hasOwnProperty('title')) 
-                console.log(book.volumeInfo.hasOwnProperty('description'))
-
-                if(book.volumeInfo.hasOwnProperty('industryIdentifiers') && book.volumeInfo.hasOwnProperty('imageLinks') && book.volumeInfo.hasOwnProperty('title') && book.volumeInfo.hasOwnProperty('description')){
-                    ok = true
-                    console.log(book.volumeInfo.imageLinks.smallThumbnail)
-                }
-
-                return (
-                    <div key={index}>
-                        {ok === true ? (
+                    return (
+                        <div key={index}>
                             <BooksCard
                                 book={book}
                                 BookNeeds={BookNeeds}
@@ -261,11 +256,8 @@ const populate = async () => {
                                 removeBookNeeds={removeBookNeeds}
                                 removeBookHas={removeBookHas}
                             />
-                        ) : (
-                            <p>X</p>
-                        )}
-                    </div>
-                );
+                        </div>
+                    );
                 })}
             </div>
             <h2>Kategori 2</h2>

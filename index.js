@@ -77,7 +77,7 @@ const insertIntoBooks = async(element) => {
   try{
     console.log("testar2")
     const newResponse = await pool.query("INSERT INTO books (Isbn, Imagelink, Title, Description, Category) VALUES($1, $2, $3, $4, $5)",
-    [element.isbn, element.imageLink, element.title, element.description, element.category])
+    [element.isbn, element.imageLinks, element.title, element.description, element.category])
   } catch (err){
     console.error(err.message)
   }
