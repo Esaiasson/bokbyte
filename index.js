@@ -35,6 +35,17 @@ app.post ("/userResponse", async (req, res) => {
   }
 })
 
+app.post ("/createBooks", async (req, res) => {
+  try{
+    const body = req.body;
+    console.log("body i post:" +  body)
+    addBook(body)
+  } catch (err){
+    console.error(err.message)
+  }
+})
+
+
 const addRespondent = async (body, id) => {
   try{
     const newResponse = await pool.query("INSERT INTO respondent (id, email, locations, session_id) VALUES($1, $2, $3, $4)",
@@ -52,6 +63,26 @@ const addBookNeeds = async (body, id) => {
   });
 
 }
+
+
+const addBook = async (body) => {
+  console.log(body)
+  body.forEach(element => {
+    insertIntoBooks(element);
+  });
+
+}
+
+const insertIntoBooks = async(element) => {
+  try{
+    console.log("testar2")
+    const newResponse = await pool.query("INSERT INTO books (Isbn, Imagelink, Title, Description, Category) VALUES($1, $2, $3, $4, $5)",
+    [element.isbn, element.imageLink, element.title, element.description, element.category])
+  } catch (err){
+    console.error(err.message)
+  }
+}
+
 
 
 const insertIntoBookNeeds = async(id, element) => {

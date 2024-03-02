@@ -9,7 +9,6 @@ import './ApiFetch.css'
 import BooksCard from './BooksCard';
 
 
-
 function ApiFetch() {
 
     const [data, setData] = React.useState(null);
@@ -46,8 +45,8 @@ function ApiFetch() {
 
     useEffect(() => {
         if(booksInDb.length >= 1){
-            callApi(1)
-            callApi(2)
+            //callApi(1)
+            //callApi(2)
         }
     }, [booksInDb]);
 
@@ -81,12 +80,12 @@ function ApiFetch() {
         const apiUrl = `https://www.googleapis.com/books/v1/volumes?q=isbn:${book}&key=${API_KEY}`;
         return fetch(apiUrl)
             .then(response => {
-            if (!response.ok) {
-                throw new Error(`HTTP error! Status: ${response.status}`);
-            }
-            return response.json();
+                if (!response.ok) {
+                    throw new Error(`HTTP error! Status: ${response.status}`);
+                }
+                return response.json();
             })
-            .then(data => data.items[0]); // Extract the first item from the response
+            .then(data => (data && data.items ? data.items[0] : null));
         });
 
         Promise.all(apiRequests)
@@ -146,10 +145,83 @@ function ApiFetch() {
         setLocation(event.target.value);
     }
 
+    const postBooks = (bookList) => {
+        console.log("boklista" + bookList)
+        fetch("/createBooks", {
+            method: 'POST',
+            headers: {"Content-Type": "application/json"},
+            body: JSON.stringify(bookList)
+        })
+        
+    }
+
+const populate = async () => {
+
+    const books = [9789164244444];
+    const booksToDb = [];
+    const category = 1
+
+    try {
+        const apiRequests = books.map(async (bookIsbn) => {
+            
+            const apiUrl = `https://www.googleapis.com/books/v1/volumes?q=isbn:${bookIsbn}&key=${API_KEY}`;
+
+            const response = await fetch(apiUrl);
+
+            if (!response.ok) {
+                throw new Error(`HTTP error! Status: ${response.status}`);
+            }
+
+            const data = await response.json();
+
+            if (data && data.items) {
+                const book = data.items[0];
+                console.log(book);
+
+                if (
+                    book.volumeInfo.hasOwnProperty('industryIdentifiers') &&
+                    book.volumeInfo.hasOwnProperty('imageLinks') &&
+                    book.volumeInfo.hasOwnProperty('title') &&
+                    book.volumeInfo.hasOwnProperty('description')
+                ) {
+
+                    let isbn = ''
+
+                    if(Array.isArray(book.volumeInfo.industryIdentifiers)){
+                        console.log("array")
+                        isbn = book.volumeInfo.industryIdentifiers[0].identifier
+                    } else{
+                        console.log("ej array")
+                        isbn = book.volumeInfo.industryIdentifiers
+                    }
+
+                    const resObj = {
+                        isbn: isbn,
+                        imageLinks: book.volumeInfo.imageLinks.smallThumbnail,
+                        title: book.volumeInfo.title,
+                        description: book.volumeInfo.description,
+                        category: category,
+                    };
+
+                    console.log("push", resObj);
+                    booksToDb.push(resObj);
+                }
+            }
+        });
+
+        await Promise.all(apiRequests);
+
+        postBooks(booksToDb);
+
+    } catch (error) {
+        console.error('Error:', error);
+    }
+};
 
   return (
     <div>
         <Button variant="success" size="lg" id="submit" onClick={showForm}>Skicka svar</Button>
+        <Button onClick={populate}>populate</Button>
         <div>
             <h2>Böcker du vill ha</h2>
             {BookNeeds.map((book, index) => (
@@ -163,33 +235,75 @@ function ApiFetch() {
         <div id="booksDiv">
             <h2>Kategori 1</h2>
             <div className="categoryDiv">
-                {booksCat1.map((book, index) => (
-                    <BooksCard
-                        book = {book}
-                        BookNeeds = {BookNeeds}
-                        BookHas = {BookHas}
-                        addBookNeeds = {addBookNeeds}
-                        addBookHas = {addBookHas}
-                        removeBookNeeds = {removeBookNeeds}
-                        removeBookHas = {removeBookHas}
-                    ></BooksCard>
-                ))}
+                {booksCat1.map((book, index) => {
+
+                let ok = false
+
+                console.log(book.volumeInfo.hasOwnProperty('industryIdentifiers'))
+                console.log(book.volumeInfo.hasOwnProperty('imageLinks'))
+                console.log(book.volumeInfo.hasOwnProperty('title')) 
+                console.log(book.volumeInfo.hasOwnProperty('description'))
+
+                if(book.volumeInfo.hasOwnProperty('industryIdentifiers') && book.volumeInfo.hasOwnProperty('imageLinks') && book.volumeInfo.hasOwnProperty('title') && book.volumeInfo.hasOwnProperty('description')){
+                    ok = true
+                    console.log(book.volumeInfo.imageLinks.smallThumbnail)
+                }
+
+                return (
+                    <div key={index}>
+                        {ok === true ? (
+                            <BooksCard
+                                book={book}
+                                BookNeeds={BookNeeds}
+                                BookHas={BookHas}
+                                addBookNeeds={addBookNeeds}
+                                addBookHas={addBookHas}
+                                removeBookNeeds={removeBookNeeds}
+                                removeBookHas={removeBookHas}
+                            />
+                        ) : (
+                            <p>X</p>
+                        )}
+                    </div>
+                );
+                })}
             </div>
             <h2>Kategori 2</h2>
             <div className="categoryDiv">
-                {booksCat2.map((book, index) => (
-                    <BooksCard
-                        book = {book}
-                        BookNeeds = {BookNeeds}
-                        BookHas = {BookHas}
-                        addBookNeeds = {addBookNeeds}
-                        addBookHas = {addBookHas}
-                        removeBookNeeds = {removeBookNeeds}
-                        removeBookHas = {removeBookHas}
-                    ></BooksCard>
-                ))}
+                {booksCat2.map((book, index) => {
+
+                let ok = false
+
+                console.log(book.volumeInfo.hasOwnProperty('industryIdentifiers'))
+                console.log(book.volumeInfo.hasOwnProperty('imageLinks'))
+                console.log(book.volumeInfo.hasOwnProperty('title')) 
+                console.log(book.volumeInfo.hasOwnProperty('description'))
+
+                if(book.volumeInfo.hasOwnProperty('industryIdentifiers') && book.volumeInfo.hasOwnProperty('imageLinks') && book.volumeInfo.hasOwnProperty('title') && book.volumeInfo.hasOwnProperty('description')){
+                    ok = true
+                    console.log(book.volumeInfo.imageLinks.smallThumbnail)
+                }
+
+                return (
+                    <div key={index}>
+                        {ok === true ? (
+                            <BooksCard
+                                book={book}
+                                BookNeeds={BookNeeds}
+                                BookHas={BookHas}
+                                addBookNeeds={addBookNeeds}
+                                addBookHas={addBookHas}
+                                removeBookNeeds={removeBookNeeds}
+                                removeBookHas={removeBookHas}
+                            />
+                        ) : (
+                            <p>X</p>
+                        )}
+                    </div>
+                );
+                })}
             </div>
-        </div>
+            </div>
         <div
             className="modal show"
             style={{ display: 'block', position: 'initial' }}
