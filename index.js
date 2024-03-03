@@ -46,9 +46,11 @@ app.post ("/createBooks", async (req, res) => {
 
 
 const addRespondent = async (body, id) => {
+  date = new Date().toString()
+
   try{
-    const newResponse = await pool.query("INSERT INTO respondent (id, email, locations, session_id) VALUES($1, $2, $3, $4)",
-    [id, body.email, body.location, body.sessionId])
+    const newResponse = await pool.query("INSERT INTO respondent (id, email, locations, session_id, res_date) VALUES($1, $2, $3, $4, $5)",
+    [id, body.email, body.location, body.sessionId, date.substring(0,10)])
   } catch (err){
     console.error(err.message)
   }

@@ -7,6 +7,7 @@ import Modal from 'react-bootstrap/Modal';
 import { v4 as uuid } from 'uuid'
 import './ApiFetch.css'
 import BooksCard from './BooksCard';
+import Alert from 'react-bootstrap/Alert';
 
 
 function ApiFetch() {
@@ -24,6 +25,7 @@ function ApiFetch() {
     const [booksCat1, setBooksCat1] = useState([])
     const [booksCat2, setBooksCat2] = useState([])
     const [show, setShow] = useState(false);
+    const [showAlert, setShowAlert] = useState(false);
 
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
@@ -58,7 +60,10 @@ function ApiFetch() {
             headers: {"Content-Type": "application/json"},
             body: JSON.stringify(body)
         })
-        
+        handleClose();
+        setShowAlert(true)
+        setEmail('')
+        setLocation('')
     }
 
     const callApi = (category) => {
@@ -165,9 +170,9 @@ function ApiFetch() {
 
 const populate = async () => {
 
-    const books = [9789137153711, 9789189750098];
+    const books = [9789180615389,];
     const booksToDb = [];
-    const category = 1
+    const category = 2
 
     try {
         const apiRequests = books.map(async (bookIsbn) => {
@@ -223,55 +228,60 @@ const populate = async () => {
 
   return (
     <div>
+        <Alert show={showAlert} className='alert alert-success fixed-alert'>
+            <Alert.Heading>Tack så mycket för ditt svar!</Alert.Heading>
+            <p>
+            Om du har skrivit din mail kan vi komma att kontakta dig angående potentiella byten 
+            </p>
+            <div className="d-flex justify-content-end">
+            <Button onClick={() => setShowAlert(false)} variant="outline-success">
+                Stäng
+            </Button>
+            </div>
+        </Alert>
         <Button variant="success" size="lg" id="submit" onClick={showForm}>Skicka svar</Button>
         <Button onClick={populate}>populate</Button>
-        <div>
-            <h2>Böcker du vill ha</h2>
-            {BookNeeds.map((book, index) => (
-                <p key={index}>{book.title}</p>
-            ))}
-            <h2>Böcker du har</h2>
-            {BookHas.map((book, index) => (
-                <p key={index}>{book.title}</p>
-            ))}
-        </div>
         <div id="booksDiv">
-            <h2>Kategori 1</h2>
-            <div className="categoryDiv">
-                {booksCat1.map((book, index) => {
-                    return (
-                        <div key={index}>
-                            <BooksCard
-                                book={book}
-                                BookNeeds={BookNeeds}
-                                BookHas={BookHas}
-                                addBookNeeds={addBookNeeds}
-                                addBookHas={addBookHas}
-                                removeBookNeeds={removeBookNeeds}
-                                removeBookHas={removeBookHas}
-                            />
-                        </div>
-                    );
-                })}
+            <div className='categoryBg'>
+                <h2>Kategori 1</h2>
+                <div className="categoryDiv">
+                    {booksCat1.map((book, index) => {
+                        return (
+                            <div key={index}>
+                                <BooksCard
+                                    book={book}
+                                    BookNeeds={BookNeeds}
+                                    BookHas={BookHas}
+                                    addBookNeeds={addBookNeeds}
+                                    addBookHas={addBookHas}
+                                    removeBookNeeds={removeBookNeeds}
+                                    removeBookHas={removeBookHas}
+                                />
+                            </div>
+                        );
+                    })}
+                </div>
             </div>
-            <h2>Kategori 1</h2>
-            <div className="categoryDiv">
-                {booksCat2.map((book, index) => {
-                    return (
-                        <div key={index}>
-                            <BooksCard
-                                book={book}
-                                BookNeeds={BookNeeds}
-                                BookHas={BookHas}
-                                addBookNeeds={addBookNeeds}
-                                addBookHas={addBookHas}
-                                removeBookNeeds={removeBookNeeds}
-                                removeBookHas={removeBookHas}
-                            />
-                        </div>
-                    );
-                })}
-            </div>
+            <div className='categoryBg'>
+                <h2>Topplista Romaner 2024</h2>
+                <div className="categoryDiv">
+                    {booksCat2.map((book, index) => {
+                        return (
+                            <div key={index}>
+                                <BooksCard
+                                    book={book}
+                                    BookNeeds={BookNeeds}
+                                    BookHas={BookHas}
+                                    addBookNeeds={addBookNeeds}
+                                    addBookHas={addBookHas}
+                                    removeBookNeeds={removeBookNeeds}
+                                    removeBookHas={removeBookHas}
+                                />
+                            </div>
+                        );
+                    })}
+                </div>
+                </div>
             </div>
         <div
             className="modal show"

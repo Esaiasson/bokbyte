@@ -21,7 +21,17 @@ function InformationModal() {
             </Modal.Header>
 
             <Modal.Body>
-            <p>Detta är ett examensarbete om byteshandel. Fyll gärna i dina bokintressen och vilka du har hemma så undersöker vi möjligheterna att skapa en digital plattform för byteshandel</p>
+            <div style={{ display: 'flex', flexDirection: 'column'  }}>
+              <p>
+                - Fyll i vilka böcker du vill ha 
+              </p>
+              <p>
+                - Fyll i vilka böcker du har hemma
+              </p>
+              <p>
+                - Klicka på "Skicka svar" nere i högra hörnet
+              </p>
+            </div>
             </Modal.Body>
 
             <Modal.Footer>
