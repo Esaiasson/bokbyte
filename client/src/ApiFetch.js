@@ -300,7 +300,10 @@ const populate = async () => {
                     </Modal.Body>
 
                     <Modal.Footer>
-                    <Button variant="primary" onClick={postUserResponse}>Skicka svar</Button>
+                        <Button variant="secondary" onClick={handleClose}>
+                            Avbryt
+                        </Button>
+                        <Button variant="primary" onClick={postUserResponse}>Skicka svar</Button>
                     </Modal.Footer>
                 </Modal.Dialog>
                 </Modal>
