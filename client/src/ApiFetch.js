@@ -24,6 +24,12 @@ function ApiFetch() {
     const [booksInDb, setBooksInDb] = useState([])
     const [booksCat1, setBooksCat1] = useState([])
     const [booksCat2, setBooksCat2] = useState([])
+    const [booksCat3, setBooksCat3] = useState([])
+    const [booksCat4, setBooksCat4] = useState([])
+    const [booksCat5, setBooksCat5] = useState([])
+    const [booksCat6, setBooksCat6] = useState([])
+    const [booksCat7, setBooksCat7] = useState([])
+    const [booksCat8, setBooksCat8] = useState([])
     const [show, setShow] = useState(false);
     const [showAlert, setShowAlert] = useState(false);
 
@@ -104,6 +110,12 @@ function ApiFetch() {
         const booksArray = []
         const books1 = []
         const books2 = []
+        const books3 = []
+        const books4 = []
+        const books5 = []
+        const books6 = []
+        const books7 = []
+        const books8 = []
         const response = await fetch("/books")
         const books = await response.json()
         await books.forEach(element => {
@@ -124,9 +136,33 @@ function ApiFetch() {
             if(element.category === 2){
                 books2.push(element)
             }
+            if(element.category === 3){
+                books3.push(element)
+            }
+            if(element.category === 4){
+                books4.push(element)
+            }
+            if(element.category === 5){
+                books5.push(element)
+            }
+            if(element.category === 6){
+                books6.push(element)
+            }
+            if(element.category === 7){
+                books7.push(element)
+            }
+            if(element.category === 8){
+                books8.push(element)
+            }
         })
         setBooksCat1(books1)
         setBooksCat2(books2)
+        setBooksCat3(books3)
+        setBooksCat4(books4)
+        setBooksCat5(books5)
+        setBooksCat6(books6)
+        setBooksCat7(books7)
+        setBooksCat8(books8)
     }
 
     const addBookNeeds = (isbn, title) => {
@@ -170,9 +206,9 @@ function ApiFetch() {
 
 const populate = async () => {
 
-    const books = [9789180615389,];
+    const books = [];
     const booksToDb = [];
-    const category = 2
+    const category = 8
 
     try {
         const apiRequests = books.map(async (bookIsbn) => {
@@ -243,27 +279,7 @@ const populate = async () => {
         <Button onClick={populate}>populate</Button>
         <div id="booksDiv">
             <div className='categoryBg'>
-                <h2>Kategori 1</h2>
-                <div className="categoryDiv">
-                    {booksCat1.map((book, index) => {
-                        return (
-                            <div key={index}>
-                                <BooksCard
-                                    book={book}
-                                    BookNeeds={BookNeeds}
-                                    BookHas={BookHas}
-                                    addBookNeeds={addBookNeeds}
-                                    addBookHas={addBookHas}
-                                    removeBookNeeds={removeBookNeeds}
-                                    removeBookHas={removeBookHas}
-                                />
-                            </div>
-                        );
-                    })}
-                </div>
-            </div>
-            <div className='categoryBg'>
-                <h2>Topplista Romaner 2024</h2>
+                <h2>Topplista Romaner</h2>
                 <div className="categoryDiv">
                     {booksCat2.map((book, index) => {
                         return (
@@ -281,8 +297,128 @@ const populate = async () => {
                         );
                     })}
                 </div>
+            </div>
+            <div className='categoryBg'>
+                <h2>Romaner (populära de senaste 20 åren)</h2>
+                <div className="categoryDiv">
+                    {booksCat3.map((book, index) => {
+                        return (
+                            <div key={index}>
+                                <BooksCard
+                                    book={book}
+                                    BookNeeds={BookNeeds}
+                                    BookHas={BookHas}
+                                    addBookNeeds={addBookNeeds}
+                                    addBookHas={addBookHas}
+                                    removeBookNeeds={removeBookNeeds}
+                                    removeBookHas={removeBookHas}
+                                />
+                            </div>
+                        );
+                    })}
                 </div>
             </div>
+            <div className='categoryBg'>
+                <h2>Topplista Deckare</h2>
+                <div className="categoryDiv">
+                    {booksCat5.map((book, index) => {
+                        return (
+                            <div key={index}>
+                                <BooksCard
+                                    book={book}
+                                    BookNeeds={BookNeeds}
+                                    BookHas={BookHas}
+                                    addBookNeeds={addBookNeeds}
+                                    addBookHas={addBookHas}
+                                    removeBookNeeds={removeBookNeeds}
+                                    removeBookHas={removeBookHas}
+                                />
+                            </div>
+                        );
+                    })}
+                </div>
+            </div>
+            <div className='categoryBg'>
+                <h2>Deckare (populära de senaste 20 åren)</h2>
+                <div className="categoryDiv">
+                    {booksCat4.map((book, index) => {
+                        return (
+                            <div key={index}>
+                                <BooksCard
+                                    book={book}
+                                    BookNeeds={BookNeeds}
+                                    BookHas={BookHas}
+                                    addBookNeeds={addBookNeeds}
+                                    addBookHas={addBookHas}
+                                    removeBookNeeds={removeBookNeeds}
+                                    removeBookHas={removeBookHas}
+                                />
+                            </div>
+                        );
+                    })}
+                </div>
+            </div>
+            <div className='categoryBg'>
+                <h2>Topplista Biografier</h2>
+                <div className="categoryDiv">
+                    {booksCat6.map((book, index) => {
+                        return (
+                            <div key={index}>
+                                <BooksCard
+                                    book={book}
+                                    BookNeeds={BookNeeds}
+                                    BookHas={BookHas}
+                                    addBookNeeds={addBookNeeds}
+                                    addBookHas={addBookHas}
+                                    removeBookNeeds={removeBookNeeds}
+                                    removeBookHas={removeBookHas}
+                                />
+                            </div>
+                        );
+                    })}
+                </div>
+            </div>
+            <div className='categoryBg'>
+                <h2>Biografier (populära de senaste 20 åren)</h2>
+                <div className="categoryDiv">
+                    {booksCat8.map((book, index) => {
+                        return (
+                            <div key={index}>
+                                <BooksCard
+                                    book={book}
+                                    BookNeeds={BookNeeds}
+                                    BookHas={BookHas}
+                                    addBookNeeds={addBookNeeds}
+                                    addBookHas={addBookHas}
+                                    removeBookNeeds={removeBookNeeds}
+                                    removeBookHas={removeBookHas}
+                                />
+                            </div>
+                        );
+                    })}
+                </div>
+            </div>
+            <div className='categoryBg'>
+                <h2>Allmänt (populära de senaste 20 åren)</h2>
+                <div className="categoryDiv">
+                    {booksCat7.map((book, index) => {
+                        return (
+                            <div key={index}>
+                                <BooksCard
+                                    book={book}
+                                    BookNeeds={BookNeeds}
+                                    BookHas={BookHas}
+                                    addBookNeeds={addBookNeeds}
+                                    addBookHas={addBookHas}
+                                    removeBookNeeds={removeBookNeeds}
+                                    removeBookHas={removeBookHas}
+                                />
+                            </div>
+                        );
+                    })}
+                </div>
+            </div>
+        </div>
         <div
             className="modal show"
             style={{ display: 'block', position: 'initial' }}

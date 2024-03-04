@@ -28,7 +28,7 @@ function BooksCard(props) {
     return (
         <>
             <div>
-                <Card key={book.isbn} id={book.isbn} style={{ width: '10rem', margin: '20px', minHeight: '472px'}}>
+                <Card key={book.isbn} id={book.isbn} style={{ width: '10rem', margin: '20px', minHeight: '550px'}}>
                 <Card.Img variant="top" src={book.imagelink} fluid></Card.Img>
                     <Card.Body>
                         <Card.Title>{book.title}</Card.Title>
