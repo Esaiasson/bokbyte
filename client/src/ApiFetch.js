@@ -276,7 +276,6 @@ const populate = async () => {
             </div>
         </Alert>
         <Button variant="success" size="lg" id="submit" onClick={showForm}>Skicka svar</Button>
-        <Button onClick={populate}>populate</Button>
         <div id="booksDiv">
             <div className='categoryBg'>
                 <h2>Topplista Romaner</h2>
