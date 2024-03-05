@@ -22,14 +22,15 @@ function InformationModal() {
 
             <Modal.Body>
             <div style={{ display: 'flex', flexDirection: 'column'  }}>
+              <h4>Såhär funkar det:</h4>
               <p>
-                - Fyll i vilka böcker du vill ha 
+                1. Klicka "Vill ha boken" på alla böcker du vill ha 
               </p>
               <p>
-                - Fyll i vilka böcker du har hemma
+                2. Klicka "Har boken" på alla böcker du redan har 
               </p>
               <p>
-                - Klicka på "Skicka svar" nere i högra hörnet
+                3. Klicka sedan på "Skicka svar" nere i högra hörnet
               </p>
             </div>
             </Modal.Body>
