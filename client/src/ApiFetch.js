@@ -282,7 +282,6 @@ const populate = async () => {
                 <div className="categoryDiv">
                     {booksCat2.map((book, index) => {
                         return (
-                            <div key={index}>
                                 <BooksCard
                                     book={book}
                                     BookNeeds={BookNeeds}
@@ -292,7 +291,6 @@ const populate = async () => {
                                     removeBookNeeds={removeBookNeeds}
                                     removeBookHas={removeBookHas}
                                 />
-                            </div>
                         );
                     })}
                 </div>

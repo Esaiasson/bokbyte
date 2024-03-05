@@ -19,9 +19,25 @@ body{
     flex-direction: column;
 }
 
+.booksCard{
+    min-width: 200px;
+    margin: 20px;
+    border: none;
+    margin-bottom: 15px;
+}
+
+button{
+    font-size: 14px;
+}
+
+.cardTitle{
+    font-size: 17px;
+}
+
 .categoryDiv{
     display: flex;
     flex-direction: row;
+    align-items: flex-end;
 }
 
 .categoryBg{
@@ -30,6 +46,11 @@ body{
     margin: auto;
     margin-top: 10px;
 }
+
+.button{
+    margin: 5px 0px;
+}
+
 
 .fixed-alert {
   position: fixed;
@@ -61,4 +82,56 @@ body{
 
 .expanded-card{
    width: 500px !important;
+}
+
+/* For Webkit browsers like Chrome and Safari */
+::-webkit-scrollbar {
+    width: 20px; /* Set the width of the scrollbar */
+}
+
+/* Track */
+::-webkit-scrollbar-track{
+    background: #0a0a0a; /* White background for the track */
+    scrollbar-width: thin;
+    scrollbar-color: #f1f1f1 #000000;
+    border-radius: 10px;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+    background: #a9a8a8; /* Black color for the handle */
+    border-radius: 10px;
+    margin: 10px; /* Add margin between thumb and track */
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+    background: #e3e1e1; /* Darker color on hover */
+}
+
+
+
+
+
+ @media only screen and (max-width: 600px) {
+        .categoryBg{
+            width: 100%;
+        }
+        .booksCard{
+            max-width: 100px;
+            min-width: 100px;
+        }
+        .cardTitle{
+            font-size: 14px;
+        }
+        .button{
+            font-size: 12px;
+            margin: 5px 0px;
+        }
+        .categoryDiv{
+            width: 95%;
+        }
+        .cardImage{
+            height: auto;
+        }
 }
