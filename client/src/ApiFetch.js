@@ -30,6 +30,7 @@ function ApiFetch() {
     const [booksCat6, setBooksCat6] = useState([])
     const [booksCat7, setBooksCat7] = useState([])
     const [booksCat8, setBooksCat8] = useState([])
+    const [booksCat9, setBooksCat9] = useState([])
     const [show, setShow] = useState(false);
     const [showAlert, setShowAlert] = useState(false);
 
@@ -116,6 +117,7 @@ function ApiFetch() {
         const books6 = []
         const books7 = []
         const books8 = []
+        const books9 = []
         const response = await fetch("/books")
         const books = await response.json()
         await books.forEach(element => {
@@ -154,6 +156,9 @@ function ApiFetch() {
             if(element.category === 8){
                 books8.push(element)
             }
+            if(element.category === 9){
+                books9.push(element)
+            }
         })
         setBooksCat1(books1)
         setBooksCat2(books2)
@@ -163,6 +168,7 @@ function ApiFetch() {
         setBooksCat6(books6)
         setBooksCat7(books7)
         setBooksCat8(books8)
+        setBooksCat9(books9)
     }
 
     const addBookNeeds = (isbn, title) => {
@@ -208,7 +214,7 @@ const populate = async () => {
 
     const books = [];
     const booksToDb = [];
-    const category = 8
+    const category = 9
 
     try {
         const apiRequests = books.map(async (bookIsbn) => {
@@ -399,6 +405,26 @@ const populate = async () => {
                 <h2>Allmänt (populära de senaste 20 åren)</h2>
                 <div className="categoryDiv">
                     {booksCat7.map((book, index) => {
+                        return (
+                            <div key={index}>
+                                <BooksCard
+                                    book={book}
+                                    BookNeeds={BookNeeds}
+                                    BookHas={BookHas}
+                                    addBookNeeds={addBookNeeds}
+                                    addBookHas={addBookHas}
+                                    removeBookNeeds={removeBookNeeds}
+                                    removeBookHas={removeBookHas}
+                                />
+                            </div>
+                        );
+                    })}
+                </div>
+            </div>
+            <div className='categoryBg'>
+                <h2>Internationella bästsäljare</h2>
+                <div className="categoryDiv">
+                    {booksCat9.map((book, index) => {
                         return (
                             <div key={index}>
                                 <BooksCard
