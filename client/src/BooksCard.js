@@ -38,16 +38,16 @@ function BooksCard(props) {
                         </Card.Text>
                     </Card.Body>
                     {!BookNeeds.some(bookNeed => bookNeed.isbn === book.isbn) &&(
-                        <Button className='button' variant="success" onClick={() => addBookNeeds(book.isbn, book.title)}>Vill ha boken</Button>
+                        <Button className='button' variant="warning" onClick={() => addBookNeeds(book.isbn, book.title)}>Vill ha boken</Button>
                     )} 
                     {BookNeeds.some(bookNeed => bookNeed.isbn === book.isbn)  &&(
                         <Button className='button' variant="danger" onClick={() => removeBookNeeds(book.isbn)}>Vill ha boken</Button>
                     )}
                     {!BookHas.some(bookHas => bookHas.isbn === book.isbn) &&(
-                        <Button className='button' variant="primary" onClick={() => addBookHas(book.isbn, book.title)}>Har boken</Button>
+                        <Button className='button' variant="primary" onClick={() => addBookHas(book.isbn, book.title)}>Äger boken</Button>
                     )} 
                     {BookHas.some(bookHas => bookHas.isbn === book.isbn)  &&(
-                        <Button className='button' variant="danger" onClick={() => removeBookHas(book.isbn)}>Har boken</Button>
+                        <Button className='button' variant="danger" onClick={() => removeBookHas(book.isbn)}>Äger boken</Button>
                     )}
                 </Card>
 

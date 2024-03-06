@@ -27,7 +27,7 @@ function InformationModal() {
                 1. Klicka "Vill ha boken" på alla böcker du vill ha 
               </p>
               <p>
-                2. Klicka "Har boken" på alla böcker du redan har 
+                2. Klicka "Äger boken" på alla böcker du redan har 
               </p>
               <p>
                 3. Klicka sedan på "Skicka svar" nere i högra hörnet

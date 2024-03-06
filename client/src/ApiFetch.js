@@ -7,7 +7,6 @@ import Modal from 'react-bootstrap/Modal';
 import { v4 as uuid } from 'uuid'
 import './ApiFetch.css'
 import BooksCard from './BooksCard';
-import Alert from 'react-bootstrap/Alert';
 
 
 function ApiFetch() {
@@ -21,6 +20,8 @@ function ApiFetch() {
     const [BookHas, setBookHas] = useState([])
     const [email, setEmail] = useState([])
     const [location, setLocation] = useState([])
+    const [wishHas, setWishHas] = useState([])
+    const [wishWant, setWishWant] = useState([])
     const [booksInDb, setBooksInDb] = useState([])
     const [booksCat1, setBooksCat1] = useState([])
     const [booksCat2, setBooksCat2] = useState([])
@@ -32,7 +33,7 @@ function ApiFetch() {
     const [booksCat8, setBooksCat8] = useState([])
     const [booksCat9, setBooksCat9] = useState([])
     const [show, setShow] = useState(false);
-    const [showAlert, setShowAlert] = useState(false);
+    const [showModalSucess, setShowModalSucess] = useState(false);
 
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
@@ -60,7 +61,9 @@ function ApiFetch() {
             'has': BookHas,
             'email': email,
             'location': location,
-            'sessionId': localStorage.getItem("session_id")
+            'sessionId': localStorage.getItem("session_id"),
+            'wishList': wishWant,
+            'wishListHas': wishHas
         }
         fetch("/userResponse", {
             method: 'POST',
@@ -68,7 +71,7 @@ function ApiFetch() {
             body: JSON.stringify(body)
         })
         handleClose();
-        setShowAlert(true)
+        setShowModalSucess(true)
         setEmail('')
         setLocation('')
     }
@@ -201,6 +204,16 @@ function ApiFetch() {
         setLocation(event.target.value);
     }
 
+    const handleChangeWishWants = (event) => {
+        setWishWant(event.target.value);
+    }
+
+    const handleChangeWishHas = (event) => {
+        setWishHas(event.target.value);
+    }
+
+    
+
     const postBooks = (bookList) => {
         fetch("/createBooks", {
             method: 'POST',
@@ -270,17 +283,22 @@ const populate = async () => {
 
   return (
     <div>
-        <Alert show={showAlert} className='alert alert-success fixed-alert'>
-            <Alert.Heading>Tack så mycket för ditt svar!</Alert.Heading>
-            <p>
-            Om du har skrivit din mail kan vi komma att kontakta dig angående potentiella byten 
-            </p>
-            <div className="d-flex justify-content-end">
-            <Button onClick={() => setShowAlert(false)} variant="outline-success">
-                Stäng
-            </Button>
-            </div>
-        </Alert>
+        <Modal show={showModalSucess}>
+            <Modal.Header>
+                <Modal.Title>Tack så mycket för ditt svar!</Modal.Title>
+            </Modal.Header>
+            <Modal.Body>
+                <p>
+                Om du har skrivit din mail kan vi komma att kontakta dig angående potentiella byten 
+                </p>
+            </Modal.Body>
+            <Modal.Footer>
+                <Button onClick={() => setShowModalSucess(false)} variant="outline-success">
+                    Stäng
+                </Button>
+            </Modal.Footer>
+            
+        </Modal>
         <Button variant="success" size="lg" id="submit" onClick={showForm}>Skicka svar</Button>
         <div id="booksDiv">
             <div className='categoryBg'>
@@ -456,6 +474,10 @@ const populate = async () => {
                         <input id="email" placeholder='Skriv din mailadress (frivilligt)' onChange={handleChangeEmail}></input>
                         <label for="postnr">Postnummer</label>
                         <input id="postnr" placeholder='Postnummer (frivilligt)' onChange={handleChangeLocation}></input>
+                        <label for="wishWants">Finns det några fler böcker du vill ha som inte fanns med på hemsidan? (Frivilligt)</label>
+                        <textarea id="wishWants"onChange={handleChangeWishWants}></textarea>
+                        <label for="wishHas">Finns det några fler böcker du äger som inte fanns med på hemsidan? (Frivilligt)</label>
+                        <textarea id="wishHas"onChange={handleChangeWishHas}></textarea>
                     </Modal.Body>
 
                     <Modal.Footer>

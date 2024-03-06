@@ -46,16 +46,16 @@ app.post ("/createBooks", async (req, res) => {
 
 
 const addRespondent = async (body, id) => {
-  date = new Date().toString()
-
-  try{
-    const newResponse = await pool.query("INSERT INTO respondent (id, email, locations, session_id, res_date) VALUES($1, $2, $3, $4, $5)",
-    [id, body.email, body.location, body.sessionId, date.substring(0,10)])
-  } catch (err){
-    console.error(err.message)
+  const date = new Date().toISOString().substring(0, 10);
+  try {
+    const newResponse = await pool.query(
+      "INSERT INTO respondent (id, email, locations, session_id, res_date, wish_list, wish_list_has) VALUES($1, $2, $3, $4, $5, $6, $7)",
+      [id, body.email, body.location, body.sessionId, date, body.wishList, body.wishListHas]
+    );
+  } catch (err) {
+    console.error(err.message);
   }
-}
-
+};
 
 
 const addBookNeeds = async (body, id) => {
